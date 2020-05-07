@@ -18,8 +18,6 @@ var indexRoutes = require("./routes/index");
 
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
-//mongoose.connect("mongodb://localhost:27017/yelp_camp_v3", { useNewUrlParser: true });
-//mongoose.connect("mongodb+srv://psahu1:%25Miasma123%2F@cluster0-mnz10.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true});
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/yelp_camp_v3";
 mongoose.connect(url,{ useNewUrlParser: true });
 
