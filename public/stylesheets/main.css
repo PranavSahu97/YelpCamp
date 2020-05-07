@@ -1,0 +1,17 @@
+/* select all timages within thumbnail tag */
+.thumbnail img{
+    width:100%;
+}
+
+/* to get rid of padding around image */
+.thumbnail{
+    padding:0;
+}
+
+.thumbnail .caption-full{
+    padding:9px;
+} 
+
+.delete-form {
+    display: inline;
+}
