@@ -1,6 +1,5 @@
 var express = require("express"),
     app = express(),
-    bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
     flash = require("connect-flash"),
     methodOverride = require("method-override"),
@@ -16,12 +15,10 @@ var commentRoutes = require("./routes/comments");
 var campgroundRoutes = require("./routes/campgrounds");
 var indexRoutes = require("./routes/index");
 
-mongoose.set('useUnifiedTopology', true);
-mongoose.set('useFindAndModify', false);
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/yelp_camp_v3";
-mongoose.connect(url,{ useNewUrlParser: true });
+mongoose.connect(url);
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 //console.log(__dirname);

@@ -4,27 +4,26 @@ var Comment = require("../models/comment");
 //all the middleware goes here
 var middlewareObj = {};
 
-middlewareObj.checkCampgroundOwnership = function(req,res,next) {
+middlewareObj.checkCampgroundOwnership = async function(req,res,next) {
     //check if user is logged in?
     if (req.isAuthenticated()) {
-        Campground.findById(req.params.id, function (err, foundCampground) {
-            if (err) {
-                req.flash("error", "Campground not found");
-                res.redirect("back");
-            } else {
-                //does user own the campground?
-                //console.log(foundCampground.author.id);   -> returns a mongoose object
-                //console.log(req.user._id);                -> returns a string. Both cannot be compared directly
+        try {
+            const foundCampground = await Campground.findById(req.params.id);
+            //does user own the campground?
+            //console.log(foundCampground.author.id);   -> returns a mongoose object
+            //console.log(req.user._id);                -> returns a string. Both cannot be compared directly
 
-                if (foundCampground.author.id.equals(req.user._id)) {
-                    next();
-                } else {
-                    //otherwise , redirect 
-                    req.flash("error", "You don't have the permission to do that");
-                    res.redirect("back");
-                }
+            if (foundCampground.author.id.equals(req.user._id)) {
+                next();
+            } else {
+                //otherwise , redirect
+                req.flash("error", "You don't have the permission to do that");
+                res.redirect("back");
             }
-        }); 
+        } catch (err) {
+            req.flash("error", "Campground not found");
+            res.redirect("back");
+        }
     }
     else {
         //if not redirect somewhere
@@ -33,26 +32,25 @@ middlewareObj.checkCampgroundOwnership = function(req,res,next) {
     }
 }
 
-middlewareObj.checkCommentOwnership = function(req,res,next) {
+middlewareObj.checkCommentOwnership = async function(req,res,next) {
     //check if user is logged in?
     if (req.isAuthenticated()) {
-        Comment.findById(req.params.comment_id, function (err, foundComment) {
-            if (err) {
-                res.redirect("back");
-            } else {
-                //does user own the comment?
-                //console.log(foundComment.author.id);   -> returns a mongoose object
-                //console.log(req.user._id);                -> returns a string. Both cannot be compared directly
+        try {
+            const foundComment = await Comment.findById(req.params.comment_id);
+            //does user own the comment?
+            //console.log(foundComment.author.id);   -> returns a mongoose object
+            //console.log(req.user._id);                -> returns a string. Both cannot be compared directly
 
-                if (foundComment.author.id.equals(req.user._id)) {
-                    next();
-                } else {
-                    //otherwise , redirect 
-                    req.flash("error", "You don't have permission to do that");
-                    res.redirect("back");
-                } 
+            if (foundComment.author.id.equals(req.user._id)) {
+                next();
+            } else {
+                //otherwise , redirect
+                req.flash("error", "You don't have permission to do that");
+                res.redirect("back");
             }
-        }); 
+        } catch (err) {
+            res.redirect("back");
+        }
     }
     else {
         //if not redirect somewhere
